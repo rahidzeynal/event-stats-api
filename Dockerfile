@@ -1,32 +1,23 @@
-# Use official Python runtime as base image
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-# Set working directory in container
+# Set working directory
 WORKDIR /app
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+# Install poetry
+RUN pip install poetry
 
-# Copy requirements first for better layer caching
-COPY requirements.txt .
+# Copy dependency files
+COPY pyproject.toml poetry.lock* ./
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi --no-root
 
 # Copy application code
-COPY app.py .
-COPY event_service.py .
+COPY app/ ./app/
 
-# Expose port 5000
-EXPOSE 5000
+# Expose port
+EXPOSE 8000
 
-# Add healthcheck
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')" || exit 1
-
-# Run the application with Gunicorn
-# 4 worker processes for handling concurrent requests
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "--access-logfile", "-", "--error-logfile", "-", "app:app"]
+# Run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
