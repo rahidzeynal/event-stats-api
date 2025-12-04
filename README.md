@@ -239,7 +239,7 @@ curl http://localhost:8000/
 # Post an event
 curl -X POST "http://localhost:8000/event" \
   -H "Content-Type: application/json" \
-  -d '{"timestamp": "2025-11-21T07:45:00Z", "value": 42.5}'
+  -d '{"timestamp": "2025-12-04T04:45:00Z", "value": 42.5}'
 
 # Get statistics
 curl http://localhost:8000/statistics
