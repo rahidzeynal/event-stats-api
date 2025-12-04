@@ -4,14 +4,14 @@ A thread-safe REST API built with FastAPI to record timestamped events and retur
 
 ## Features
 
-- ✅ **Thread-safe in-memory storage** using Python's `threading.Lock`
-- ✅ **Timezone-aware datetime handling** with proper UTC support
-- ✅ **Automatic cleanup** of events older than 1 hour
-- ✅ **Real-time statistics** calculation (min, max, mean, count)
-- ✅ **ISO 8601 timestamp** support with automatic timezone conversion
-- ✅ **Comprehensive test suite** with 15+ test cases
-- ✅ **Docker support** for easy deployment
-- ✅ **Debug endpoint** for troubleshooting
+- **Thread-safe in-memory storage** using Python's `threading.Lock`
+- **Timezone-aware datetime handling** with proper UTC support
+- **Automatic cleanup** of events older than 1 hour
+- **Real-time statistics** calculation (min, max, mean, count)
+- **ISO 8601 timestamp** support with automatic timezone conversion
+- **Comprehensive test suite** with 15+ test cases
+- **Docker support** for easy deployment
+- **Debug endpoint** for troubleshooting
 
 ## API Endpoints
 
