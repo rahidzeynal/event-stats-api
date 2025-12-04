@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from app.main import app
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 
 client = TestClient(app)
@@ -14,7 +14,7 @@ def test_root_endpoint():
 
 def test_post_event():
     """Test posting a single event"""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     res = client.post("/event", json={"timestamp": now, "value": 12.0})
     assert res.status_code == 200
     assert res.json()["status"] == "success"
@@ -22,7 +22,7 @@ def test_post_event():
 
 def test_post_and_get_single_event():
     """Test posting an event and retrieving statistics"""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     res = client.post("/event", json={"timestamp": now, "value": 12.0})
     assert res.status_code == 200
 
@@ -36,11 +36,11 @@ def test_post_and_get_single_event():
 
 def test_multiple_events():
     """Test posting multiple events and verifying statistics"""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).isoformat()
     
     values = [10.0, 20.0, 30.0, 40.0, 50.0]
     for value in values:
-        timestamp = now.isoformat() + "Z"
+        timestamp = now
         res = client.post("/event", json={"timestamp": timestamp, "value": value})
         assert res.status_code == 200
     
@@ -53,13 +53,13 @@ def test_multiple_events():
 
 def test_statistics_calculation():
     """Test that statistics are correctly calculated"""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).isoformat()
     
     # Clear old events by waiting or use fresh client
     test_values = [5.0, 15.0, 25.0]
     
     for value in test_values:
-        timestamp = now.isoformat() + "Z"
+        timestamp = now
         client.post("/event", json={"timestamp": timestamp, "value": value})
     
     stats = client.get("/statistics").json()
@@ -74,13 +74,13 @@ def test_statistics_calculation():
 def test_old_events_filtered():
     """Test that events older than 1 hour are not included"""
     # Post an old event (more than 1 hour ago)
-    old_time = datetime.utcnow() - timedelta(hours=2)
-    old_timestamp = old_time.isoformat() + "Z"
+    old_time = datetime.now(timezone.utc) - timedelta(hours=2)
+    old_timestamp = old_time.isoformat()
     res = client.post("/event", json={"timestamp": old_timestamp, "value": 100.0})
     assert res.status_code == 200
     
     # Post a recent event
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     res = client.post("/event", json={"timestamp": now, "value": 50.0})
     assert res.status_code == 200
     
@@ -103,9 +103,9 @@ def test_empty_statistics():
 def test_event_timestamp_formats():
     """Test different valid ISO 8601 timestamp formats"""
     formats = [
-        datetime.utcnow().isoformat() + "Z",
-        datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+        datetime.now(timezone.utc).isoformat(),
+        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
     ]
     
     for timestamp in formats:
@@ -115,7 +115,7 @@ def test_event_timestamp_formats():
 
 def test_negative_values():
     """Test that negative values are handled correctly"""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     res = client.post("/event", json={"timestamp": now, "value": -25.5})
     assert res.status_code == 200
     
@@ -125,7 +125,7 @@ def test_negative_values():
 
 def test_floating_point_precision():
     """Test that floating point values are handled with proper precision"""
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     precise_value = 123.456789
     res = client.post("/event", json={"timestamp": now, "value": precise_value})
     assert res.status_code == 200
@@ -139,7 +139,7 @@ def test_concurrent_requests():
     """Test that concurrent requests are handled correctly"""
     import concurrent.futures
     
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     
     def post_event(value):
         return client.post("/event", json={"timestamp": now, "value": value})
@@ -160,7 +160,7 @@ def test_concurrent_requests():
 def test_statistics_consistency():
     """Test that statistics remain consistent across multiple calls"""
     # Post some events
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     for i in range(5):
         client.post("/event", json={"timestamp": now, "value": float(i)})
     

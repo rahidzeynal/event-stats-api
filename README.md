@@ -146,14 +146,14 @@ The application will be available at `http://localhost:8000`
 
 The project includes comprehensive tests covering:
 
-- ✅ Basic event posting and retrieval
-- ✅ Multiple events and statistics calculation
-- ✅ Time window filtering (1-hour boundary)
-- ✅ Timezone-aware datetime handling
-- ✅ Edge cases (empty stats, negative values, floating-point precision)
-- ✅ Concurrent request handling
-- ✅ Different timestamp formats
-- ✅ Statistics consistency
+- Basic event posting and retrieval
+- Multiple events and statistics calculation
+- Time window filtering (1-hour boundary)
+- Timezone-aware datetime handling
+- Edge cases (empty stats, negative values, floating-point precision)
+- Concurrent request handling
+- Different timestamp formats
+- Statistics consistency
 
 Run tests with:
 ```bash
@@ -396,17 +396,17 @@ asyncio.run(main())
 
 ## Future Enhancements
 
-- [ ] Add persistent storage (database backend)
-- [ ] Implement read-write locks for better concurrency
-- [ ] Add endpoint to query statistics for custom time ranges
-- [ ] Add standard deviation and percentiles
-- [ ] Implement event batching for bulk inserts
-- [ ] Add rate limiting and authentication
-- [ ] Add Prometheus metrics endpoint
-- [ ] Implement background cleanup task
-- [ ] Add data export functionality (CSV, JSON)
-- [ ] Support for multiple time windows (5 min, 15 min, 1 hour, 24 hours)
-- [ ] Event deduplication based on timestamp + value
+- Add persistent storage (database backend)
+- Implement read-write locks for better concurrency
+- Add endpoint to query statistics for custom time ranges
+- Add standard deviation and percentiles
+- Implement event batching for bulk inserts
+- Add rate limiting and authentication
+- Add Prometheus metrics endpoint
+- Implement background cleanup task
+- Add data export functionality (CSV, JSON)
+- Support for multiple time windows (5 min, 15 min, 1 hour, 24 hours)
+- Event deduplication based on timestamp + value
 
 ## Development Notes
 
