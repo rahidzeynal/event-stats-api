@@ -158,6 +158,13 @@ The project includes comprehensive tests covering:
 Run tests with:
 ```bash
 poetry run pytest -v
+
+# From project root
+PYTHONPATH=. pytest tests/ -v
+
+# Or export it first
+export PYTHONPATH=.
+pytest tests/ -v
 ```
 
 For coverage report:
